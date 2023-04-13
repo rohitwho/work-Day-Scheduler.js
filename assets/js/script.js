@@ -2,38 +2,35 @@
 
 const date = document.getElementById('dtae')
 const userInput = document.getElementById("user-Input");
-const dayJsObject = dayjs().format("dddd/MMM/DD     HH:mm") 
-const buttons = document.querySelectorAll("button");
+const dayJsObject = dayjs().format("dddd/MMM/DD|HH:mm") 
 const containerDiv = document.querySelector(".container-lg");
 const currentHour = dayjs().hour();
-const textAreas = document.querySelectorAll(".description");
-const save = document.getElementById("saved")
-const clearText = document.getElementById("clear");
-
 
 
 
 $(function () {
-////ON CLICK EVENT THIS FUNCTION WILL GO THROUGH EACH DIV ELEMENT AND LOOK FOR BUTTON TAG AND INVOKE  THE PUSHTOSTORAGE FUNCTION///////////////
-  $('button').click(function(event) {
-    if (event.target.tagName === "BUTTON") {
-      pushToStorage();
-     
+  loadValues() ;
+  //// THIS FUNCTION WILL GO THROUGH EACH TEXTAREA TAG AND PUSH USER-INPUT IN LOCAL STORAGE/////////////////////////////
+
+  $('.saveBtn').click(function(){
+    let value = $(this).siblings('.description').val();
+    var key = $(this).parent().attr('id');
+    localStorage.setItem(key,value);
+
+  })
+  //////HERE YOU CAN GET LOCALSTORAGE VALUE//////////
+  
+function loadValues() {
+  $('.time-block').each(function() {
+    let key = $(this).attr('id');
+    let value = localStorage.getItem(key);
+    if (value) {
+      $(this).find('.description').val(value);
     }
   });
-  //// THIS FUNCTION WILL GO THROUGH EACH TEXTAREA TAG AND PUSH USER-INPUT IN LOCAL STORAGE/////////////////////////////
-  function pushToStorage() {
-    $('textarea').each(function() {
-      localStorage.setItem(this.id, this.value);
-    });
-  //////HERE YOU CAN GET LOCALSTORAGE VALUE//////////
-    $('textarea').each(function() {
-      var showItem = localStorage.getItem(this.id);
-      $(userInput).innerHTML = showItem;
-     
-    });
-  }
-  
+}
+
+
  
   ////////THIS WILL GO THROUGH EVERY DIV ELEMENT AND ADD THE CLASS ACCORDING TO THE HOUR///////////////
   
@@ -51,8 +48,8 @@ $(function () {
   });
 
 
-
   date.innerHTML=dayJsObject;
+  
 
 
 });
